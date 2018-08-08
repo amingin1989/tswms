@@ -17,18 +17,18 @@
       </div>
 
       <div class="form-group">
-        <label for="roleId">群組代號：</label>
+        <label for="roleId" style="margin-left: 20px;">群組代號：</label>
         <select class="form-control" id="roleId" v-model="roleId">
           <template v-for="role in roles">
             <option v-bind:value="role.id">{{ role.id }} {{ role.name }}</option>
           </template>
         </select>
       </div>
-      <button type="button" class="btn btn-info" @click="search()">查詢</button>
-      <button type="button" class="btn btn-primary" @click="">新增</button>
+      <button type="button" class="btn btn-info" style="margin-left: 20px;" @click="search()">查詢</button>
+      
     </form>
 
-    <usrEditable :datasource="usrs" v-if="showUsr"></usrEditable>
+    <usrEditable :usrs="usrs" v-if="showUsr"></usrEditable>
     <loading v-if="showLoading"></loading>
     
   </div>

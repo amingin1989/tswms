@@ -3,25 +3,25 @@
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th v-for="col in datasource.cols" v-if="datasource.cols.length" :key="col">{{col}}</th>
+                    <th v-for="col in usrs.cols" v-if="usrs.cols.length" :key="col"><strong>{{col}}</strong></th>
                     <th></th>
-                    <th></th>
+                    <th><button type="button" class="btn btn-primary" @click="addData">新增</button></th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(row, index) in datasource.rows" v-if="datasource.rows.length" :key="index" :class="{editing: row == editedUser}" v-cloak>
+                <tr v-for="(usr, index) in usrs.rows" v-if="usrs.rows.length" :key="index" :class="{editing: usr == editedUser}" v-cloak>
                     <td>
-                        {{row.USER_ID}}
+                        {{usr.USER_ID}}
                     </td>
                     <td>
-                        {{row.USER_WORK_ID}}
+                        {{usr.USER_WORK_ID}}
                     </td>
                     <td>
                         <div class="view">
-                            {{row.USER_NM}}
+                            {{usr.USER_NM}}
                         </div>
                         <div class="edit">
-                            <input type="text" v-model="row.USER_NM"/>
+                            <input type="text" v-model="usr.USER_NM"/>
                         </div>
                     </td>
                     <td>
@@ -29,15 +29,15 @@
                             *****
                         </div>
                         <div class="edit">
-                            <input type="password" v-model="row.PASSWORD"/>
+                            <input type="password" v-model="usr.PASSWORD"/>
                         </div>
                     </td>
                     <td>
                         <div class="view">
-                            {{row.WH_NM}}
+                            {{usr.WH_NM}}
                         </div>
                         <div class="edit">
-                            <select class="form-control" id="wh" v-model="row.WH_CODE">
+                            <select class="form-control" id="wh" v-model="usr.WH_CODE">
                                 <template v-for="wh in whs">
                                     <option :value="wh.wh_code">{{ wh.wh_name }}</option>
                                 </template>
@@ -46,10 +46,10 @@
                     </td>
                     <td>
                         <div class="view">
-                            {{row.GROUP_NM}}
+                            {{usr.GROUP_NM}}
                         </div>
                         <div class="edit">
-                            <select class="form-control" id="groupId" v-model="row.GROUP_ID">
+                            <select class="form-control" id="groupId" v-model="usr.GROUP_ID">
                                 <template v-for="group in groups">
                                     <option :value="group.id">{{ group.id }} {{ group.name }}</option>
                                 </template>
@@ -57,52 +57,51 @@
                         </div>
                     </td>
                     <td>
-                        {{row.LOGIN_STATUS}}
+                        {{usr.LOGIN_STATUS}}
                     </td>
                     <td>
                         <div class="view">
-                            {{row.STATUS_SHOW}}
+                            {{usr.STATUS_SHOW}}
                         </div>
                         <div class="edit">
-                            <label class="radio-inline"><input type="radio" name="status" :value="true" v-model="status">正常</label>
-                            <label class="radio-inline"><input type="radio" name="status" :value="false" v-model="status">停用</label>
+                            <label class="radio-inline"><input type="radio" id="status" value="true" v-model="usr.STATUS">正常</label>
+                            <label class="radio-inline"><input type="radio" id="status" value="false" v-model="usr.STATUS">停用</label>
                         </div>
                     </td>
                     <td>
                         <div class="view">
-                            <button type="button" class="btn btn-warning" @click.prevent="editData(row)">編輯</button>
+                            <button type="button" class="btn btn-warning" @click.prevent="editData(usr)">編輯</button>
                         </div>
                         <div class="edit">
-                            <button type="button" class="btn btn-success" @click.prevent="saveData(row)">儲存</button>
-                            <button type="button" class="btn btn-default" @click.prevent="cancelEdit(row)">取消</button>         
+                            <button type="button" class="btn btn-success" @click.prevent="saveData(usr)">儲存</button>
+                            <button type="button" class="btn btn-default" @click.prevent="cancelEdit(usr)">取消</button>         
                         </div>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-danger" @click.prevent="" :disabled="!rmBtnEnabled">刪除</button>
+                        <button type="button" class="btn btn-danger" @click.prevent="">刪除</button>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <!-- <usrEditForm v-show="showUsrEdit" 
-                    :edit-data="editData" 
-                    @editFormClose="editFormClose" 
-                    @saveEdit="saveEdit">
-        </usrEditForm> -->
+        <usrAddForm v-show="showUsrAdd" 
+                    :groups="groups" 
+                    :whs="whs"
+                    @addFormClose="addFormClose">
+        </usrAddForm>
     </div>
 </template>
 
 <script>
-//import usrEditForm from './UsrEditForm.vue'
+import usrAddForm from './UsrAddForm.vue'
 
 export default {
     name: "UsrEditable",
-    props : ['datasource'],
+    props : ['usrs'],
     data() {
         return {
-            showUsrEdit: false,
+            showUsrAdd: false,
             //editData: {},
             editedUser: null,
-            rmBtnEnabled: true,
             groups: [{"id":"00001","name":"管理員"},{"id":"00002","name":"使用者"}],
             whs: [{"wh_code":"001", "wh_name":"A倉"},{"wh_code":"002", "wh_name":"B倉"},{"wh_code":"003", "wh_name":"C倉"}]
         };
@@ -116,27 +115,31 @@ export default {
         saveEdit: function(index, data) {
             console.log('123 saveEdit...');
             this.showUsrEdit = false;
-        },
-        editFormClose: function() {
-            console.log('Test editFormClose...');
-            this.showUsrEdit = false;
         },*/
-        editData: function(user){
+        addFormClose: function() {
+            this.showUsrAdd = false;
+        },
+        addData: function(){
+            this.showUsrAdd = true;
+        },
+        editData: function(usr){
             //取消還原用
-            this._beforeEditingCache = Object.assign({}, user);
-            this.rmBtnEnabled = false;
-            this.editedUser = user;
-            console.log(user.STATUS);
+            this._beforeEditingCache = Object.assign({}, usr);
+            this.editedUser = usr;
         },
         saveData: function(){
-            this.rmBtnEnabled = true;
+            //var originData = this._beforeEditingCache;
+            //var editedData = this.editedUser;
+            
             this.axios.post('/updateUsr', 
             {
-              USER_NM: this.editedUser.USER_NM,
-              PASSWORD: this.editedUser.PASSWORD,
-              WH_CODE: this.editedUser.WH_CODE,
-              STATUS: this.editedUser.STATUS,
-              GROUP_ID: this.editedUser.GROUP_ID
+                USER_ID: this.editedUser.USER_ID,
+                USER_WORK_ID: this.editedUser.USER_WORK_ID,
+                USER_NM: this.editedUser.USER_NM,
+                PASSWORD: this.editedUser.PASSWORD,
+                WH_CODE: this.editedUser.WH_CODE,
+                STATUS: this.editedUser.STATUS,
+                GROUP_ID: this.editedUser.GROUP_ID
             },
             { headers: {
                 'Content-type': 'application/x-www-form-urlencoded',
@@ -148,15 +151,14 @@ export default {
 
             this.editedUser = null;
         },
-        cancelEdit: function(user){
-            this.rmBtnEnabled = true;
+        cancelEdit: function(usr){
             //取消還原用
-            Object.assign(user, this._beforeEditingCache);
+            Object.assign(usr, this._beforeEditingCache);
             this.editedUser = this._beforeEditingCache = null;
         }
     },
     components: {
-        //usrEditForm
+        usrAddForm
     }
 };
 </script>

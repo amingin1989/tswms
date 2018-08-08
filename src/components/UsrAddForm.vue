@@ -4,11 +4,25 @@
       <div class="modal-wrapper">
         <div class="modal-container">
             <div class="modal-header">
-                <h2>編輯使用者資訊</h2>
+                <h2>新增使用者</h2>
             </div>
 
             <form class="form-horizontal">
                 <div class="modal-body">
+                    <div class="form-group">
+                        <label for="editUsrId" class="control-label col-md-3">使用者代號</label>
+                        <div class="col-md-9">
+                            <input type="text" id="editUsrId" v-model="usrId" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editUsrWorkId" class="control-label col-md-3">使用者員編</label>
+                        <div class="col-md-9">
+                            <input type="text" id="editUsrWorkId" v-model="usrWorkId" class="form-control">
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <label for="editUsrNm" class="control-label col-md-3">使用者名稱</label>
                         <div class="col-md-9">
@@ -57,9 +71,9 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" @click="saveEdit">
-                    OK
+                    Save
                 </button>
-                <button type="button" class="btn btn-default" @click="editFormClose">
+                <button type="button" class="btn btn-default" @click="addFormClose">
                     Cancel
                 </button>
             </div>
@@ -71,32 +85,25 @@
 
 <script>
 export default {
-    name: "UsrEditForm",
-    props : ['editData'],
+    name: "UsrAddForm",
+    props : ['groups', 'whs'],
     data: function() {
         return { 
-            usrNm: this.editData.USER_NM,
+            usrId: '',
+            usrWorkId: '',
+            usrNm: '',
             pwd: '',
             wh: '',
             groupId: '',
-            status: '',
-            groups: [{"id":"00001","name":"管理員"},{"id":"00002","name":"使用者"}],
-            whs: [{"wh_code":"001", "wh_name":"衛星倉1"},{"wh_code":"002", "wh_name":"衛星倉2"}]
+            status: true
         };
     },
     methods: {
-        testFun: function() {
-            var data = this.editData;
-            this.usrNm = data.USER_NM;
-            this.wh = '002';
-            this.groupId = '00001';
-            this.status = 'false';
+        addFormClose: function() {//呼叫父方法
+            this.$emit('addFormClose');
         },
-        editFormClose: function() {//呼叫父方法
-            this.$emit('editFormClose');
-        },
-        saveEdit: function() {//呼叫父方法
-            this.$emit('saveEdit');
+        saveEdit: function() {
+            this.$emit('addFormClose');//呼叫父方法
         }
     }
 };
