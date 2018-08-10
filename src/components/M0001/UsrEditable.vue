@@ -3,9 +3,13 @@
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th v-for="col in usrs.cols" v-if="usrs.cols.length" :key="col"><strong>{{col}}</strong></th>
+                    <th v-for="col in usrs.cols" v-if="usrs.cols.length" :key="col">
+                        <strong>{{col}}</strong>
+                    </th>
                     <th></th>
-                    <th><button type="button" class="btn btn-primary" @click="addData">新增</button></th>
+                    <th>
+                        <button type="button" class="btn btn-primary" @click="addData">新增</button>
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -21,7 +25,7 @@
                             {{usr.USER_NM}}
                         </div>
                         <div class="edit">
-                            <input type="text" v-model="usr.USER_NM"/>
+                            <input type="text" class="form-control" v-model="usr.USER_NM" />
                         </div>
                     </td>
                     <td>
@@ -29,7 +33,7 @@
                             *****
                         </div>
                         <div class="edit">
-                            <input type="password" v-model="usr.PASSWORD"/>
+                            <input type="password" class="form-control" v-model="usr.PASSWORD" />
                         </div>
                     </td>
                     <td>
@@ -49,7 +53,7 @@
                             {{usr.GROUP_NM}}
                         </div>
                         <div class="edit">
-                            <select class="form-control" id="groupId" v-model="usr.GROUP_ID">
+                            <select class="form-control" id="editableGroupId" v-model="usr.GROUP_ID">
                                 <template v-for="group in groups">
                                     <option :value="group.id">{{ group.id }} {{ group.name }}</option>
                                 </template>
@@ -70,44 +74,48 @@
                     </td>
                     <td>
                         <div class="view">
-                            <button type="button" class="btn btn-warning" @click.prevent="editData(usr)">編輯</button>
+                            <button type="button" class="btn btn-warning" @click.prevent="editData(usr)" v-if="!usr.LOGIN_STATUS">編輯</button>
                         </div>
                         <div class="edit">
                             <button type="button" class="btn btn-success" @click.prevent="saveData(usr)">儲存</button>
-                            <button type="button" class="btn btn-default" @click.prevent="cancelEdit(usr)">取消</button>         
+                            <button type="button" class="btn btn-default" @click.prevent="cancelEdit(usr)">取消</button>
                         </div>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-danger" @click.prevent="">刪除</button>
+                        <button type="button" class="btn btn-danger" @click.prevent="rmData(usr)">刪除</button>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <usrAddForm v-show="showUsrAdd" 
-                    :groups="groups" 
-                    :whs="whs"
-                    @addFormClose="addFormClose">
+        <usrAddForm v-show="showUsrAdd" :groups="groups" :whs="whs" @addFormClose="addFormClose">
         </usrAddForm>
     </div>
 </template>
 
 <script>
-import usrAddForm from './UsrAddForm.vue'
+import usrAddForm from "./UsrAddForm.vue";
 
 export default {
-    name: "UsrEditable",
-    props : ['usrs'],
-    data() {
-        return {
-            showUsrAdd: false,
-            //editData: {},
-            editedUser: null,
-            groups: [{"id":"00001","name":"管理員"},{"id":"00002","name":"使用者"}],
-            whs: [{"wh_code":"001", "wh_name":"A倉"},{"wh_code":"002", "wh_name":"B倉"},{"wh_code":"003", "wh_name":"C倉"}]
-        };
-    },
-    methods: {
-        /*editFormShow: function(row) {
+  name: "UsrEditable",
+  props: ["usrs"],
+  data() {
+    return {
+      showUsrAdd: false,
+      //editData: {},
+      editedUser: null,
+      groups: [
+        { id: "00001", name: "管理員" },
+        { id: "00002", name: "使用者" }
+      ],
+      whs: [
+        { wh_code: "001", wh_name: "A倉(001)" },
+        { wh_code: "002", wh_name: "B倉(002)" },
+        { wh_code: "003", wh_name: "C倉(003)" }
+      ]
+    };
+  },
+  methods: {
+    /*editFormShow: function(row) {
             //this.editData = row;
             //console.log('editFormShow >>' + this.editData.USER_NM);
             this.showUsrEdit = true;
@@ -116,77 +124,83 @@ export default {
             console.log('123 saveEdit...');
             this.showUsrEdit = false;
         },*/
-        addFormClose: function() {
-            this.showUsrAdd = false;
-        },
-        addData: function(){
-            this.showUsrAdd = true;
-        },
-        editData: function(usr){
-            //取消還原用
-            this._beforeEditingCache = Object.assign({}, usr);
-            this.editedUser = usr;
-        },
-        saveData: function(){
-            //var originData = this._beforeEditingCache;
-            //var editedData = this.editedUser;
-            
-            this.axios.post('/updateUsr', 
-            {
-                USER_ID: this.editedUser.USER_ID,
-                USER_WORK_ID: this.editedUser.USER_WORK_ID,
-                USER_NM: this.editedUser.USER_NM,
-                PASSWORD: this.editedUser.PASSWORD,
-                WH_CODE: this.editedUser.WH_CODE,
-                STATUS: this.editedUser.STATUS,
-                GROUP_ID: this.editedUser.GROUP_ID
-            },
-            { headers: {
-                'Content-type': 'application/x-www-form-urlencoded',
-            }}).then(function(response) {
-              
-            }).catch(function(error) {
-
-            });
-
-            this.editedUser = null;
-        },
-        cancelEdit: function(usr){
-            //取消還原用
-            Object.assign(usr, this._beforeEditingCache);
-            this.editedUser = this._beforeEditingCache = null;
-        }
+    addFormClose: function() {
+      this.showUsrAdd = false;
     },
-    components: {
-        usrAddForm
+    addData: function() {
+      this.showUsrAdd = true;
+    },
+    editData: function(usr) {
+      //取消還原用
+      this._beforeEditingCache = Object.assign({}, usr);
+      this.editedUser = usr;
+    },
+    saveData: function() {
+      //var originData = this._beforeEditingCache;
+      //var editedData = this.editedUser;
+
+      this.axios
+        .post(
+          "/updateUsr",
+          {
+            USER_ID: this.editedUser.USER_ID,
+            USER_WORK_ID: this.editedUser.USER_WORK_ID,
+            USER_NM: this.editedUser.USER_NM,
+            PASSWORD: this.editedUser.PASSWORD,
+            WH_CODE: this.editedUser.WH_CODE,
+            STATUS: this.editedUser.STATUS,
+            GROUP_ID: this.editedUser.GROUP_ID
+          },
+          {
+            headers: {
+              "Content-type": "application/x-www-form-urlencoded"
+            }
+          }
+        )
+        .then(function(response) {})
+        .catch(function(error) {});
+
+      this.editedUser = null;
+    },
+    cancelEdit: function(usr) {
+      //取消還原用
+      Object.assign(usr, this._beforeEditingCache);
+      this.editedUser = this._beforeEditingCache = null;
+    },
+    rmData: function(usr){
+
     }
+  },
+  components: {
+    usrAddForm
+  }
 };
 </script>
 
-<style>
-
+<style scoped>
 .table {
   margin-top: 40px;
 }
 
-.table td,th{
+.table td, caption, th {
   text-align: center;
 }
 
-.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
-  background-color:#5bc0de40;
+.table-hover tbody tr:hover td,
+.table-hover tbody tr:hover th {
+  background-color: #5bc0de40;
 }
 
 [v-cloak] {
-    display: none;
+  display: none;
 }
 .edit {
-    display: none;
+  display: none;
 }
 .editing .edit {
-    display: block
+  display: block;
 }
 .editing .view {
-    display: none;
+  display: none;
 }
 </style>
