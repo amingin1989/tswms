@@ -8,12 +8,15 @@ import bootstrap from 'bootstrap'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
 import { faKey } from '@fortawesome/free-solid-svg-icons'
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
+import { faWrench } from '@fortawesome/free-solid-svg-icons'
+import { faUserAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 import 'bootstrap/dist/css/bootstrap.css'
 
-library.add(faUser)
-library.add(faKey)
+library.add(faUser, faKey, faSignOutAlt, faSearch, faWrench, faUserAlt)
 
 Vue.use(bootstrap)
 Vue.use(VueAxios, axios)

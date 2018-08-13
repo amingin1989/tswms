@@ -43,7 +43,7 @@
                         <div class="edit">
                             <select class="form-control" id="wh" v-model="usr.WH_CODE">
                                 <template v-for="wh in whs">
-                                    <option :value="wh.wh_code" :key="'UsrEditable'+wh">{{ wh.wh_name }}</option>
+                                    <option :value="wh.wh_code" :key="'UsrEditable'+wh.wh_code">{{ wh.wh_name }}</option>
                                 </template>
                             </select>
                         </div>
@@ -55,7 +55,7 @@
                         <div class="edit">
                             <select class="form-control" id="editableGroupId" v-model="usr.GROUP_ID">
                                 <template v-for="group in groups">
-                                    <option :value="group.id" :key="'UsrEditable'+group">{{ group.id }} {{ group.name }}</option>
+                                    <option :value="group.id" :key="'UsrEditable'+group.id">{{ group.id }} {{ group.name }}</option>
                                 </template>
                             </select>
                         </div>
@@ -97,16 +97,11 @@ import usrAddForm from "./UsrAddForm.vue";
 
 export default {
   name: "UsrEditable",
-  props: ["usrs"],
+  props: ["usrs", 'groups'],
   data() {
     return {
       showUsrAdd: false,
-      //editData: {},
       editedUser: null,
-      groups: [
-        { id: "00001", name: "管理員" },
-        { id: "00002", name: "使用者" }
-      ],
       whs: [
         { wh_code: "001", wh_name: "A倉(001)" },
         { wh_code: "002", wh_name: "B倉(002)" },
@@ -115,15 +110,6 @@ export default {
     };
   },
   methods: {
-    /*editFormShow: function(row) {
-            //this.editData = row;
-            //console.log('editFormShow >>' + this.editData.USER_NM);
-            this.showUsrEdit = true;
-        },
-        saveEdit: function(index, data) {
-            console.log('123 saveEdit...');
-            this.showUsrEdit = false;
-        },*/
     addFormClose: function() {
       this.showUsrAdd = false;
     },
@@ -136,9 +122,6 @@ export default {
       this.editedUser = usr;
     },
     saveData: function() {
-      //var originData = this._beforeEditingCache;
-      //var editedData = this.editedUser;
-
       this.axios
         .post(
           "/updateUsr",

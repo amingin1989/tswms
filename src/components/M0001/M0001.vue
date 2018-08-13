@@ -19,7 +19,7 @@
       <button type="button" class="btn btn-info" style="margin-left: 20px;" @click="search()">查詢</button>
     </form>
 
-    <usrEditable v-if="showUsr" :usrs="usrs"></usrEditable>
+    <usrEditable v-if="showUsr" :usrs="usrs" :groups="groups"></usrEditable>
     <loading v-if="showLoading"></loading>
     <msgDialog v-if="showMsgDialog" @msgDialogClose="msgDialogClose" :title="msgTitle" :msg="msgContent"></msgDialog>
   </div>
@@ -71,8 +71,8 @@ export default {
           this.showLoading = true;
           /*setTimeout(() => { //loading訊息顯示5秒
             this.showLoading = false;
-          }, 2000);*/
-          
+          }, 2000);
+          this.showUsr = true;*/
 
           var data = Qs.stringify({
             userId:this.usrId,
@@ -108,6 +108,9 @@ export default {
       this.showMsgDialog = false;
       this.msgTitle = '';
       this.msgContent = '';
+    },
+    rmUsr: function(){
+
     }
   },
   mounted: function(){
