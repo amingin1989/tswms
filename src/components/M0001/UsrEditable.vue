@@ -1,6 +1,6 @@
 <template>
     <div>
-        <table class="table table-striped table-hover">
+        <table class="table table-striped table-hover table-bordered">
             <thead>
                 <tr>
                     <th v-for="col in usrs.cols" v-if="usrs.cols.length" :key="col">
@@ -43,7 +43,7 @@
                         <div class="edit">
                             <select class="form-control" id="wh" v-model="usr.WH_CODE">
                                 <template v-for="wh in whs">
-                                    <option :value="wh.wh_code">{{ wh.wh_name }}</option>
+                                    <option :value="wh.wh_code" :key="'UsrEditable'+wh">{{ wh.wh_name }}</option>
                                 </template>
                             </select>
                         </div>
@@ -55,7 +55,7 @@
                         <div class="edit">
                             <select class="form-control" id="editableGroupId" v-model="usr.GROUP_ID">
                                 <template v-for="group in groups">
-                                    <option :value="group.id">{{ group.id }} {{ group.name }}</option>
+                                    <option :value="group.id" :key="'UsrEditable'+group">{{ group.id }} {{ group.name }}</option>
                                 </template>
                             </select>
                         </div>
@@ -68,8 +68,8 @@
                             {{usr.STATUS_SHOW}}
                         </div>
                         <div class="edit">
-                            <label class="radio-inline"><input type="radio" id="status" value="true" v-model="usr.STATUS">正常</label>
-                            <label class="radio-inline"><input type="radio" id="status" value="false" v-model="usr.STATUS">停用</label>
+                            <label><input type="radio" id="status" value="true" v-model="usr.STATUS"> 正常</label>
+                            <label><input type="radio" id="status" value="false" v-model="usr.STATUS"> 停用</label>
                         </div>
                     </td>
                     <td>
@@ -167,9 +167,7 @@ export default {
       Object.assign(usr, this._beforeEditingCache);
       this.editedUser = this._beforeEditingCache = null;
     },
-    rmData: function(usr){
-
-    }
+    rmData: function(usr) {}
   },
   components: {
     usrAddForm
@@ -182,7 +180,9 @@ export default {
   margin-top: 40px;
 }
 
-.table td, caption, th {
+.table td,
+caption,
+th {
   text-align: center;
 }
 

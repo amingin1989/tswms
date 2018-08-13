@@ -45,7 +45,7 @@ router.beforeEach((to, from, next) => {
     } else {
       next({ path: '/loginpage' });
     }
-  } else {//只有登入頁面不用驗證
+  } else {//目前只有登入頁面不用驗證
     if (isLogin) {
       next({ path: '/' });
     } else {

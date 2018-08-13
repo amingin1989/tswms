@@ -9,13 +9,13 @@
 				</div>
 				<ul class="nav navbar-nav">
 					<template v-for="func in functions">
-						<li class="dropdown">
+						<li class="dropdown" :key="'Main'+func">
 							<a class="dropdown-toggle" data-toggle="dropdown">{{func.func_name}}
 								<span class="caret"></span>
 							</a>
 							<ul class="dropdown-menu">
 								<template v-for="item in func.func_data">
-									<li>
+									<li :key="'Main'+item">
 										<router-link :to="item.url">{{ item.name }}</router-link>
 									</li>
 								</template>
@@ -26,7 +26,6 @@
 				<div class="collapse navbar-collapse" id="myNavbar">
 					<ul class="nav navbar-nav navbar-right">
 						<li>
-							<!-- <a href="/logout">登出</a> -->
 							<a href="/logout" type="button" @click.prevent="logout">登出</a>
 						</li>
 					</ul>
@@ -67,5 +66,5 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 </style>

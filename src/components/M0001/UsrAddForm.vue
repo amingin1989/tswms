@@ -49,7 +49,7 @@
                         <div class="col-md-9">
                             <select class="form-control" id="wh" v-model="wh">
                                 <template v-for="wh in whs">
-                                    <option :value="wh.wh_code">{{ wh.wh_code }} {{ wh.wh_name }}</option>
+                                    <option :value="wh.wh_code" :key="'UsrAddForm'+wh">{{ wh.wh_code }} {{ wh.wh_name }}</option>
                                 </template>
                             </select>
                         </div>
@@ -60,7 +60,7 @@
                         <div class="col-md-9">
                             <select class="form-control" id="addFormGroupId" v-model="groupId">
                                 <template v-for="group in groups">
-                                    <option :value="group.id">{{ group.id }} {{ group.name }}</option>
+                                    <option :value="group.id" :key="'UsrAddForm'+group">{{ group.id }} {{ group.name }}</option>
                                 </template>
                             </select>
                         </div>

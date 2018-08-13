@@ -5,11 +5,19 @@ import store from './store'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import bootstrap from 'bootstrap'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faUser } from '@fortawesome/free-solid-svg-icons'
+import { faKey } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 import 'bootstrap/dist/css/bootstrap.css'
 
+library.add(faUser)
+library.add(faKey)
+
 Vue.use(bootstrap)
 Vue.use(VueAxios, axios)
+Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios

@@ -2,14 +2,6 @@
   <div>
     <h1 id="M0001_Title">人員管理</h1>
     <hr>
-    <!-- <p v-if="errors.length">
-      <template v-for="error in errors">
-        <div class="alert alert-danger">
-          {{ error }}
-        </div>
-      </template>
-    </p> -->
-
     <form class="form-inline">
       <div class="form-group">
         <label for="usrId">使用者代號/員編：</label>
@@ -25,38 +17,40 @@
         </select>
       </div>
       <button type="button" class="btn btn-info" style="margin-left: 20px;" @click="search()">查詢</button>
-      
     </form>
 
-    <usrEditable :usrs="usrs" v-if="showUsr"></usrEditable>
+    <usrEditable v-if="showUsr" :usrs="usrs"></usrEditable>
     <loading v-if="showLoading"></loading>
-    
+    <msgDialog v-if="showMsgDialog" @msgDialogClose="msgDialogClose" :title="msgTitle" :msg="msgContent"></msgDialog>
   </div>
 </template>
 
 <script>
 import loading from '../materials/Loading.vue'
+import msgDialog from '../materials/MsgDialog.vue'
 import usrEditable from './UsrEditable.vue'
+import Qs from "qs";
 
 export default {
   name: "M0001",
   data() {
     return {
-      //roles: {}
       usrId: '',
       groupId: '',
       groups: [{"id":"00001","name":"管理員"},{"id":"00002","name":"使用者"}],
-      //errors: [],
       showUsr: false,
       showLoading: false,
+      showMsgDialog: false,
+      msgTitle:'',
+      msgContent: '',
       
       usrs: {
         cols : ["使用者代號", "使用者員編", "使用者姓名", "密碼", "歸屬倉庫", "群組代號", "登入狀態", "狀態"],
         rows : [{"USER_ID":"M001", "USER_WORK_ID":"M001", "USER_NM":"AAA", "PASSWORD":"", "WH_CODE": "001", "WH_NM":"A倉", "GROUP_ID":"00001", "GROUP_NM":"00001 管理員", "LOGIN_STATUS":true, "STATUS":"true", "STATUS_SHOW":"正常"},
-      {"USER_ID":"002", "USER_WORK_ID":"", "USER_NM":"BBB", "PASSWORD":"", "WH_CODE": "002", "WH_NM":"Ｂ倉", "GROUP_ID":"00001", "GROUP_NM":"00001 管理員", "LOGIN_STATUS":true, "STATUS":"false", "STATUS_SHOW":"停用"},
+      {"USER_ID":"M002", "USER_WORK_ID":"M002", "USER_NM":"BBB", "PASSWORD":"", "WH_CODE": "002", "WH_NM":"Ｂ倉", "GROUP_ID":"00001", "GROUP_NM":"00001 管理員", "LOGIN_STATUS":true, "STATUS":"false", "STATUS_SHOW":"停用"},
       {"USER_ID":"003", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"00002", "GROUP_NM":"00002 使用者", "LOGIN_STATUS":true, "STATUS":"true", "STATUS_SHOW":"正常"},
       {"USER_ID":"004", "USER_WORK_ID":"", "USER_NM":"DDD", "PASSWORD":"", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"00002", "GROUP_NM":"00002 使用者", "LOGIN_STATUS":true, "STATUS":"true", "STATUS_SHOW":"正常"},
-      {"USER_ID":"005", "USER_WORK_ID":"", "USER_NM":"EEE", "PASSWORD":"", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"00002", "GROUP_NM":"00002 使用者", "LOGIN_STATUS":false, "STATUS":"true", "STATUS_SHOW":"正常"},
+      {"USER_ID":"005", "USER_WORK_ID":"", "USER_NM":"EEE", "PASSWORD":"", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"00002", "GROUP_NM":"00002 使用者", "LOGIN_STATUS":false, "STATUS":"false", "STATUS_SHOW":"停用"},
       {"USER_ID":"006", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"00002", "GROUP_NM":"00002 使用者", "LOGIN_STATUS":true, "STATUS":"true", "STATUS_SHOW":"正常"},
       {"USER_ID":"007", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"00002", "GROUP_NM":"00002 使用者", "LOGIN_STATUS":false, "STATUS":"true", "STATUS_SHOW":"正常"},
       {"USER_ID":"008", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"00002", "GROUP_NM":"00002 使用者", "LOGIN_STATUS":true, "STATUS":"true", "STATUS_SHOW":"正常"},
@@ -74,45 +68,70 @@ export default {
 	},
   methods: {
     search: function() {
-      /*if(usrId.value && groupId.value){*/
           this.showLoading = true;
-          setTimeout(() => { //loading訊息顯示5秒
+          /*setTimeout(() => { //loading訊息顯示5秒
             this.showLoading = false;
-          }, 2000);
-          this.showUsr = true;
-          this.axios.post('/findUsr', 
-            {
-              userId:this.usrId,
+          }, 2000);*/
+          
+
+          var data = Qs.stringify({
+            userId:this.usrId,
               groupId:this.groupId
-            },
+          });
+          var _this = this;
+          this.axios.post('/findUsr', 
+            data,
             { headers: {
                 'Content-type': 'application/x-www-form-urlencoded',
-            }}).then(function(response) {
-              
-            }).catch(function(error) {
+            }}).then(function(res) {
+              _this.showLoading = false;
+              var resData = res.data;
 
+              if(resData.usrs){
+                _this.showUsr = true; 
+                _this.usrs = resData.usrs;
+              }else{
+                _this.showUsr = false;
+                _this.msgTitle = '訊息';
+                _this.msgContent = '查無資料';
+                _this.showMsgDialog = true;
+              }
+
+            }).catch(function(error) {
+              _this.showLoading = false;
+              _this.msgTitle = '錯誤訊息';
+              _this.msgContent = '系統異常，請聯絡系統管理員';
+              _this.showMsgDialog = true;
             });
-      /*}else{
-          this.errors = [];
-          if (!usrId.value) {
-              this.errors.push('需輸入使用者代號/員編');
-          }
-          if (!groupId.value) {
-              this.errors.push('需要選擇群組代號');
-          }
-          setTimeout(() => { //錯誤訊息顯示5秒
-            this.errors = [];
-            this.$refs.userId.focus();
-        }, 5000);
-      }*/
+    },
+    msgDialogClose: function(){
+      this.showMsgDialog = false;
+      this.msgTitle = '';
+      this.msgContent = '';
     }
   },
   mounted: function(){
-    
+    this.showLoading = true;
+    var _this = this;
+    this.axios.get('/getGroups')
+    .then(function (res) {
+        _this.showLoading = false;
+        var resData = res.data;
+        if(resData.groups){
+          _this.groups = resData.groups;
+        }
+    })
+      .catch(function (error) {
+      _this.showLoading = false;
+      _this.msgTitle = '錯誤訊息';
+      _this.msgContent = '系統異常，請聯絡系統管理員';
+      _this.showMsgDialog = true;
+    });
   },
   components: {
     loading,
-    usrEditable
+    usrEditable,
+    msgDialog
   }
 };
 </script>
