@@ -7,17 +7,19 @@ export default new Vuex.Store({
     state: {
         user: {
             userName: '',
-            authoritys: [],
+            role: '',
             isLogin: false,
-            functions: []
+            functions: [],
+            groups: []
         }
     },
     mutations: {
         setUserData(state, {userData}) {
             state.user.userName = userData.userName;
-            state.user.authoritys = userData.authoritys;
+            state.user.role = userData.role;
             state.user.isLogin = userData.isLogin;
             state.user.functions = userData.functions;
+            state.user.groups = userData.groups;
         }
     }
 });

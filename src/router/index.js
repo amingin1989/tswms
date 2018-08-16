@@ -4,6 +4,8 @@ import store from '../store'
 import Login from '@/components/Login'
 import Main from '@/components/Main'
 import M0001 from '@/components/M0001/M0001'
+import M0002 from '@/components/M0002/M0002'
+import S0001 from '@/components/S0001/S0001'
 
 Vue.use(Router)
 
@@ -16,9 +18,19 @@ const router = new Router({
       meta: { requiresAuth: true },
       children: [
         {
-          path: '/m0001',
+          path: '/m0001',//人員管理
           name: 'M0001',
           component: M0001,
+          meta: { requiresAuth: true, adminAuth: true }
+        },{
+          path: '/m0002',//群組權限管理
+          name: 'M0002',
+          component: M0002,
+          meta: { requiresAuth: true, adminAuth: true }
+        }, {
+          path: '/s0001',
+          name: 'S0001',
+          component: S0001,
           meta: { requiresAuth: true }
         }
       ]
@@ -34,14 +46,24 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  var user = store.state.user;
-  var isLogin = user.isLogin;
-  
-  //isLogin = true;
+  const user = store.state.user;
+  //const isLogin = user.isLogin;
+
+  const isLogin = true;
 
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (isLogin) {
-      next(); // 往下繼續執行
+      if (to.meta.adminAuth) {//只有管理員才能進入的頁面
+        //const role = user.role;
+        const role = 'ROLE_ADMIN';
+        if (role == 'ROLE_ADMIN') {
+          next(); // 往下繼續執行
+        } else {
+          next({ path: '/' });
+        }
+      } else {
+        next();
+      }
     } else {
       next({ path: '/loginpage' });
     }

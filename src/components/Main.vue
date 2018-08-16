@@ -39,6 +39,7 @@
 
 		<msgDialog v-if="showMsgDialog" @msgDialogClose="msgDialogClose" :title="msgTitle" :msg="msgContent"></msgDialog>
 		<div class="container">
+			<div class="funcTitle"></div>
 			<router-view></router-view>
 		</div>
 	</div>
@@ -90,5 +91,8 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
+.funcTitle {
+  margin-top: 80px;
+}
 </style>
