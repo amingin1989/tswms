@@ -33,7 +33,7 @@
                 <span v-else-if="props.column.field == 'WH_TYPE' && props.row.editMode">
                     <select class="form-control" v-model="props.row.WH_TYPE">
                         <template v-for="whType in whTypes">
-                            <option :value="whType.TYPE_ID" :key="'WhMgt'+whType.TYPE_ID">{{ whType.TYPE_NAME }}</option>
+                            <option :value="whType.TYPE_ID" :key="'WhMgt'+ whType.TYPE_ID">{{ whType.TYPE_NAME }}</option>
                         </template>
                     </select>
                 </span>
@@ -43,7 +43,7 @@
                 <span v-else-if="props.column.field == 'WH_ADDRESS' && props.row.editMode">
                     <input type="text" class="form-control" v-model="props.row.WH_ADDRESS" />
                 </span>
-                <span v-else-if="props.column.field == 'AREA' && props.row.editMode">
+                <span v-else-if="props.column.field == 'AREA' && props.row.editMode && props.row.WH_TYPE == '2'">
                     <input type="text" class="form-control" v-model="props.row.AREA" />
                 </span>
                 <span v-else-if="props.column.field == 'SAVE'">

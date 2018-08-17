@@ -93,7 +93,10 @@ export default {
   },
   methods: {
     funcTypeFormat: function(value) {
-      return value == "1" ? "PC" : value == "2" ? "HT" : "";
+      const typeArray = this.funcTypes.filter(function(funcType) {
+        return funcType.TYPE_ID == value;
+      });
+      return (typeArray.length) ? typeArray[0].TYPE_NAME : '';
     },
     statusFormat: function(value) {
       return value ? "啟用" : "停用";

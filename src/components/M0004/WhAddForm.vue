@@ -40,7 +40,7 @@
                             <div class="form-group">
                                 <label class="control-label col-md-4">區域</label>
                                 <div class="col-md-8">
-                                    <input type="text" v-model="area" class="form-control" placeholder="請輸入區域">
+                                    <input type="text" v-model="area" class="form-control" placeholder="請輸入區域" :disabled="areaInputDisabled">
                                 </div>
                             </div>
 
@@ -75,6 +75,7 @@ export default {
       whNm: "",
       whAddress: "",
       area: "",
+      areaInputDisabled: false,
       errors: []
     };
   },
@@ -101,7 +102,7 @@ export default {
       if (!this.whAddress) {
         this.errors.push("倉庫地址 需填寫");
       }
-      if (!this.area) {
+      if (!this.area && this.whType.TYPE_ID == "2") {
         this.errors.push("區域 需填寫");
       }
       if (!this.whType) {
@@ -109,7 +110,7 @@ export default {
       }
     },
     post: function() {
-        console.log(this.$data);
+      console.log(this.$data);
       this.axios
         .post(
           "/addWh",
@@ -125,6 +126,11 @@ export default {
     },
     clear: function() {
       Object.assign(this.$data, this.$options.data());
+    }
+  },
+  watch: {
+    whType: function(whType) {
+      this.areaInputDisabled = whType.TYPE_ID == "1" ? true : false;
     }
   }
 };

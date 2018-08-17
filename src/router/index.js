@@ -59,9 +59,9 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   const user = store.state.user;
-  //const isLogin = user.isLogin;
+  const isLogin = user.isLogin;
 
-  const isLogin = true;
+  //const isLogin = true;
 
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (isLogin) {

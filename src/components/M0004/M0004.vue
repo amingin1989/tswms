@@ -1,12 +1,12 @@
 <template>
-    <div id="m0004">
-        <h1>
-            <font-awesome-icon icon="warehouse" /> 倉庫資料維護</h1>
-        <hr>
+  <div id="m0004">
+    <h1>
+      <font-awesome-icon icon="warehouse" /> 倉庫資料維護</h1>
+    <hr>
 
-        <whMgt v-if="showWh" :whs="whs" :whTypes="whTypes"></whMgt>
-        <loading v-if="showLoading"></loading>
-    </div>
+    <whMgt v-if="showWh" :whs="whs" :whTypes="whTypes"></whMgt>
+    <loading v-if="showLoading"></loading>
+  </div>
 </template>
 
 <script>
@@ -91,43 +91,49 @@ export default {
     };
   },
   methods: {
-      whTypeFormat: function(value){
-          return value == "1" ? "轉運倉" : value == "2" ? "衛星倉" : "";
-      }
+    whTypeFormat: function(value) {
+      const typeArray = this.whTypes.filter(function(whType) {
+        return whType.TYPE_ID == value;
+      });
+      return typeArray.length ? typeArray[0].TYPE_NAME : "";
+    }
   },
   mounted: function() {
-      this.showWh = true;
-      this.whs.rows = [
-        {
-          WH_NO: "DC1",
-          WH_NM: "中壢倉",
-          WH_TYPE: "1",
-          WH_ADDRESS: "桃園市XXXXXXXX",
-          AREA: "",
-          editMode: false
-        },{
-          WH_NO: "NS1",
-          WH_NM: "北衛一",
-          WH_TYPE: "2",
-          WH_ADDRESS: "台北市OOOOO",
-          AREA: "1",
-          editMode: false
-        },{
-          WH_NO: "NS2",
-          WH_NM: "北衛二",
-          WH_TYPE: "2",
-          WH_ADDRESS: "新北市OOOOOO",
-          AREA: "2",
-          editMode: false
-        },{
-          WH_NO: "DC2",
-          WH_NM: "大園倉",
-          WH_TYPE: "1",
-          WH_ADDRESS: "桃園市XXXXX",
-          AREA: "",
-          editMode: false
-        }
-      ];
+    this.showWh = true;
+    this.whs.rows = [
+      {
+        WH_NO: "DC1",
+        WH_NM: "中壢倉",
+        WH_TYPE: "1",
+        WH_ADDRESS: "桃園市XXXXXXXX",
+        AREA: "",
+        editMode: false
+      },
+      {
+        WH_NO: "NS1",
+        WH_NM: "北衛一",
+        WH_TYPE: "2",
+        WH_ADDRESS: "台北市OOOOO",
+        AREA: "1",
+        editMode: false
+      },
+      {
+        WH_NO: "NS2",
+        WH_NM: "北衛二",
+        WH_TYPE: "2",
+        WH_ADDRESS: "新北市OOOOOO",
+        AREA: "2",
+        editMode: false
+      },
+      {
+        WH_NO: "DC2",
+        WH_NM: "大園倉",
+        WH_TYPE: "1",
+        WH_ADDRESS: "桃園市XXXXX",
+        AREA: "",
+        editMode: false
+      }
+    ];
   },
   components: {
     loading,

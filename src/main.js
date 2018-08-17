@@ -25,7 +25,7 @@ import { faSave } from '@fortawesome/free-solid-svg-icons'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons'
 import { faWarehouse } from '@fortawesome/free-solid-svg-icons'
-import { faUserCog } from '@fortawesome/free-solid-svg-icons'
+import { faUsersCog } from '@fortawesome/free-solid-svg-icons'
 import { faSitemap } from '@fortawesome/free-solid-svg-icons'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
@@ -33,7 +33,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'vue-multiselect/dist/vue-multiselect.min.css'
 import 'vue-good-table/dist/vue-good-table.css'
 
-library.add(faPlus, faSitemap, faUserCog, faUsers, faWarehouse, faUserPlus, faTrashAlt, faSave,
+library.add(faPlus, faSitemap, faUsersCog, faUsers, faWarehouse, faUserPlus, faTrashAlt, faSave,
   faEdit, faUser, faKey, faSignOutAlt, faSearch, faWrench, faUserAlt,
   faAngleDoubleLeft, faAngleLeft, faAngleRight, faAngleDoubleRight)
 

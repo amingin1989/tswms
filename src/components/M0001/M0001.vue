@@ -1,6 +1,6 @@
 <template>
   <div id="m0001">
-    <h1><font-awesome-icon icon="user-cog" /> 人員管理</h1>
+    <h1><font-awesome-icon icon="users-cog" /> 人員管理</h1>
     <hr>
     <usrEditable v-if="showUsr" :usrs="usrs" :groups="groups" :whs="whs"></usrEditable>
     <loading v-if="showLoading"></loading>
