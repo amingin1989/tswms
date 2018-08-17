@@ -208,9 +208,6 @@ export default {
 </script>
 
 <style scoped>
-.rowSpan {
-  margin-top: 40px;
-}
 </style>
           
       

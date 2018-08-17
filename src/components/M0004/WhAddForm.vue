@@ -4,52 +4,51 @@
             <div class="modal-wrapper">
                 <div class="modal-container">
                     <div class="modal-header">
-                        <h3>新增功能</h3>
+                        <h3>新增倉庫</h3>
                     </div>
 
                     <form class="form-horizontal">
                         <div class="modal-body">
                             <ul v-if="errors.length" class="form-group">
-                                <li v-for="error in errors" :key="'FuncAddForm' + error">
+                                <li v-for="error in errors" :key="'WhAddForm' + error">
                                     <small class="form-text text-danger">
                                         {{ error }}
                                     </small>
                                 </li>
                             </ul>
                             <div class="form-group">
-                                <label class="control-label col-md-4">功能代號</label>
+                                <label class="control-label col-md-4">倉庫代號</label>
                                 <div class="col-md-8">
-                                    <input type="text" v-model="funcId" class="form-control" placeholder="請輸入功能代號">
+                                    <input type="text" v-model="whNo" class="form-control" placeholder="請輸入倉庫代號">
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label class="control-label col-md-4">功能名稱</label>
+                                <label class="control-label col-md-4">倉庫名稱</label>
                                 <div class="col-md-8">
-                                    <input type="text" v-model="funcNm" class="form-control" placeholder="請輸入功能名稱">
+                                    <input type="text" v-model="whNm" class="form-control" placeholder="請輸入倉庫名稱">
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label class="control-label col-md-4">功能路徑</label>
+                                <label class="control-label col-md-4">倉庫地址</label>
                                 <div class="col-md-8">
-                                    <input type="text" v-model="funcPath" class="form-control" placeholder="請輸入功能路徑">
+                                    <input type="text" v-model="whAddress" class="form-control" placeholder="請輸入倉庫地址">
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label class="control-label col-md-4">使用類型</label>
+                                <label class="control-label col-md-4">區域</label>
                                 <div class="col-md-8">
-                                    <multiselect v-model="funcType" :options="funcTypes" :multiple="false" :allow-empty="false" :close-on-select="true" :searchable="false" track-by="TYPE_ID" label="TYPE_NAME" placeholder="請選擇使用類型">
+                                    <input type="text" v-model="area" class="form-control" placeholder="請輸入區域">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-4">倉庫類型</label>
+                                <div class="col-md-8">
+                                    <multiselect v-model="whType" :options="whTypes" :multiple="false" :allow-empty="false" :close-on-select="true" :searchable="false" track-by="TYPE_ID" label="TYPE_NAME" placeholder="請選擇倉庫類型">
                                     </multiselect>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="control-label col-md-4">狀態</label>
-                                <div class="col-md-8">
-                                    <label class="radio-inline"><input type="radio" name="status" value="true" v-model="status">啟用</label>
-                                    <label class="radio-inline"><input type="radio" name="status" value="false" v-model="status">停用</label>
                                 </div>
                             </div>
                         </div>
@@ -67,15 +66,15 @@
 
 <script>
 export default {
-  name: "FuncAddForm",
-  props: ["funcTypes"],
+  name: "WhAddForm",
+  props: ["whTypes"],
   data: function() {
     return {
-      funcId: "",
-      funcType: "",
-      funcNm: "",
-      funcPath: "",
-      status: true,
+      whNo: "",
+      whType: "",
+      whNm: "",
+      whAddress: "",
+      area: "",
       errors: []
     };
   },
@@ -93,27 +92,27 @@ export default {
     valid: function() {
       this.errors = [];
 
-      if (!this.funcId) {
-        this.errors.push("功能代號 需填寫");
+      if (!this.whNo) {
+        this.errors.push("倉庫代號 需填寫");
       }
-      if (this.funcId && !this.validId(this.funcId)) {
-        this.errors.push("功能代號 必須是英文和數字");
+      if (!this.whNm) {
+        this.errors.push("倉庫名稱 需填寫");
       }
-      if (!this.funcNm) {
-        this.errors.push("功能名稱 需填寫");
+      if (!this.whAddress) {
+        this.errors.push("倉庫地址 需填寫");
       }
-      if (!this.funcPath) {
-        this.errors.push("功能路徑 需填寫");
+      if (!this.area) {
+        this.errors.push("區域 需填寫");
       }
-      if (!this.funcType) {
-        this.errors.push("使用類型 需選擇");
+      if (!this.whType) {
+        this.errors.push("倉庫類型 需選擇");
       }
     },
     post: function() {
         console.log(this.$data);
       this.axios
         .post(
-          "/addFunc",
+          "/addWh",
           {},
           {
             headers: {
@@ -126,10 +125,6 @@ export default {
     },
     clear: function() {
       Object.assign(this.$data, this.$options.data());
-    },
-    validId: function(id) {
-      var format = /^[\d|a-zA-Z]+$/;
-      return format.test(id);
     }
   }
 };
