@@ -4,7 +4,7 @@
             <div class="modal-wrapper">
                 <div class="modal-container">
                     <div class="modal-header">
-                        <h3>新增群組</h3>
+                        <h3>新增功能</h3>
                     </div>
 
                     <form class="form-horizontal">
@@ -17,23 +17,30 @@
                                 </li>
                             </ul>
                             <div class="form-group">
-                                <label class="control-label col-md-4">群組代號</label>
+                                <label class="control-label col-md-4">功能代號</label>
                                 <div class="col-md-8">
-                                    <input type="text" v-model="groupId" class="form-control" placeholder="請輸入群組代號">
+                                    <input type="text" v-model="funcId" class="form-control" placeholder="請輸入功能代號">
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label class="control-label col-md-4">群組名稱</label>
+                                <label class="control-label col-md-4">功能名稱</label>
                                 <div class="col-md-8">
-                                    <input type="text" v-model="groupNm" class="form-control" placeholder="請輸入群組名稱">
+                                    <input type="text" v-model="funcNm" class="form-control" placeholder="請輸入功能名稱">
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label class="control-label col-md-4">群組使用人員</label>
+                                <label class="control-label col-md-4">功能路徑</label>
                                 <div class="col-md-8">
-                                    <multiselect v-model="groupType" :options="groups" :multiple="false" :allow-empty="false" :close-on-select="true" :searchable="false" track-by="GROUP_TYPE" label="GROUP_NAME" placeholder="請選擇群組">
+                                    <input type="text" v-model="funcPath" class="form-control" placeholder="請輸入功能路徑">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-4">使用類型</label>
+                                <div class="col-md-8">
+                                    <multiselect v-model="funcType" :options="funcTypes" :multiple="false" :allow-empty="false" :close-on-select="true" :searchable="false" track-by="TYPE_ID" label="TYPE_NAME" placeholder="請選擇使用類型">
                                     </multiselect>
                                 </div>
                             </div>
@@ -60,13 +67,14 @@
 
 <script>
 export default {
-  name: "GroupAddForm",
-  props: ["groups"],
+  name: "FuncAddForm",
+  props: ["funcTypes"],
   data: function() {
     return {
-      groupNm: "",
-      groupId: "",
-      groupType: "",
+      funcId: "",
+      funcType: "",
+      funcNm: "",
+      funcPath: "",
       status: true,
       errors: []
     };
@@ -85,23 +93,27 @@ export default {
     valid: function() {
       this.errors = [];
 
-      if (!this.groupId) {
-        this.errors.push("群組代號 需填寫");
+      if (!this.funcId) {
+        this.errors.push("功能代號 需填寫");
       }
-      if (this.groupId && !this.validId(this.groupId)) {
-        this.errors.push("群組代號 必須是英文和數字");
+      if (this.funcId && !this.validId(this.funcId)) {
+        this.errors.push("功能代號 必須是英文和數字");
       }
-      if (!this.groupNm) {
-        this.errors.push("群組名稱 需填寫");
+      if (!this.funcNm) {
+        this.errors.push("功能名稱 需填寫");
       }
-      if (!this.groupType) {
-        this.errors.push("群組使用人員 需選擇");
+      if (!this.funcPath) {
+        this.errors.push("功能路徑 需填寫");
+      }
+      if (!this.funcType) {
+        this.errors.push("使用類型 需選擇");
       }
     },
     post: function() {
+        console.log(this.$data);
       this.axios
         .post(
-          "/addGroup",
+          "/addFunc",
           {},
           {
             headers: {

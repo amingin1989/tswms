@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <div id="usrEditable">
         <div class="row rowSpan">
         </div>
-        <vue-good-table :columns="usrs.cols" :rows="usrs.rows" :lineNumbers="false" styleClass="vgt-table striped bordered" :select-options="{ 
+        <vue-good-table :columns="usrs.cols" :rows="usrs.rows" :lineNumbers="false" styleClass="vgt-table striped bordered condensed" :select-options="{ 
                 enabled: false,
             }" :search-options="{
                 enabled: true,
@@ -83,7 +83,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import usrAddForm from "./UsrAddForm.vue";
 import { VueGoodTable } from "vue-good-table";
 
@@ -93,7 +92,6 @@ export default {
   data() {
     return {
       showUsrAdd: false,
-      editedUser: null,
       preSelectedRow: null
     };
   },
@@ -109,6 +107,7 @@ export default {
             //儲存
             console.log("SAVE");
             this.preSelectedRow.editMode = false;
+            this.updateUsr(params.row);
           } else {
             //修改
             console.log("EDIT");
@@ -123,7 +122,7 @@ export default {
       }
     },
     recoverData: function() {
-        console.log('recoverData idx: ' + this.preSelectedRow.originalIndex)
+      console.log("recoverData idx: " + this.preSelectedRow.originalIndex);
       const originData = this.usrs.rows[this.preSelectedRow.originalIndex];
       this.preSelectedRow.USER_ID = originData.USER_ID;
       this.preSelectedRow.USER_WORK_ID = originData.USER_WORK_ID;
@@ -143,18 +142,18 @@ export default {
     addFormShow: function() {
       this.showUsrAdd = true;
     },
-    saveData: function() {
+    updateUsr: function(usr) {
       this.axios
         .post(
           "/updateUsr",
           {
-            USER_ID: this.editedUser.USER_ID,
-            USER_WORK_ID: this.editedUser.USER_WORK_ID,
-            USER_NM: this.editedUser.USER_NM,
-            PASSWORD: this.editedUser.PASSWORD,
-            WH_CODE: this.editedUser.WH_CODE,
-            STATUS: this.editedUser.STATUS,
-            GROUP_ID: this.editedUser.GROUP_ID
+            USER_ID: usr.USER_ID,
+            USER_WORK_ID: usr.USER_WORK_ID,
+            USER_NM: usr.USER_NM,
+            PASSWORD: usr.PASSWORD,
+            WH_CODE: usr.WH_CODE,
+            STATUS: usr.STATUS,
+            GROUP_ID: usr.GROUP_ID
           },
           {
             headers: {
@@ -164,8 +163,6 @@ export default {
         )
         .then(function(response) {})
         .catch(function(error) {});
-
-      this.editedUser = null;
     }
   },
   components: {

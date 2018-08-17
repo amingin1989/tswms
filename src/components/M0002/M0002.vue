@@ -25,11 +25,11 @@
     </div>
     <div class="row">
       <div class="col-md-10">
-        <multiselect v-model="selectedFunc" :options="functions" :multiple="true" :allow-empty="true" :close-on-select="false" group-values="funcData" group-label="funcCatgName" :group-select="true" :hide-selected="true" track-by="FUNCTION_ID" label="FUNCTION_NAME" placeholder="請選擇 / 輸入欲查詢功能">
+        <multiselect v-model="selectedFunc" :options="funcs" :multiple="true" :allow-empty="true" :close-on-select="false" group-values="funcData" group-label="funcCatgName" :group-select="true" :hide-selected="true" track-by="FUNCTION_ID" label="FUNCTION_NAME" placeholder="請選擇 / 輸入欲查詢功能">
         </multiselect>
       </div>
       <div class="col-md-2">
-        <button type="button" class="btn btn-warning" :disabled="!functions.length" @click="selectAllNot">{{ selectAllText }}</button>
+        <button type="button" class="btn btn-warning" :disabled="!funcs.length" @click="selectAllNot">{{ selectAllText }}</button>
       </div>
     </div>
     <div class="row rowSpan">
@@ -62,7 +62,7 @@ export default {
         { GROUP_ID: "799", GROUP_NAME: "倉庫管理人員", GROUP_TYPE: "7" }
       ],
       showGroupName: "",
-      functions: [],
+      funcs: [],
       funcLength: 0,
       selectedFunc: [],
       selectAllText: "全選"
@@ -82,7 +82,7 @@ export default {
       if (this.selectAllText == "全選") {
         const _this = this;
         _this.selectedFunc = [];
-        _this.functions.forEach(function(funcCatg, key) {
+        _this.funcs.forEach(function(funcCatg, key) {
           funcCatg.funcData.forEach(function(func, funcKey) {
             _this.selectedFunc.push(func);
           });
@@ -108,7 +108,7 @@ export default {
       _this.selectedFunc = [];
 
       //顯示該群組能使用的所有功能
-      _this.functions = [
+      _this.funcs = [
         {
           funcCatgName: "管理類",
           funcData: [
@@ -169,7 +169,7 @@ export default {
         }
       ];
 
-      _this.functions.forEach(function(funcCatg, key) {
+      _this.funcs.forEach(function(funcCatg, key) {
         funcCatg.funcData.forEach(function(func, funcKey) {
           _this.funcLength++;
         });
@@ -179,7 +179,7 @@ export default {
   mounted: function() {
     this.groupId = "";
     this.selectedFunc = [];
-    this.functions = [];
+    this.funcs = [];
   },
   components: {
     loading,

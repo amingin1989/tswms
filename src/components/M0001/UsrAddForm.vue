@@ -63,7 +63,7 @@
               <div class="form-group">
                 <label class="control-label col-md-3">狀態</label>
                 <div class="col-md-9">
-                  <label class="radio-inline"><input type="radio" name="status" value="true" v-model="status">正常</label>
+                  <label class="radio-inline"><input type="radio" name="status" value="true" v-model="status">啟用</label>
                   <label class="radio-inline"><input type="radio" name="status" value="false" v-model="status">停用</label>
                 </div>
               </div>

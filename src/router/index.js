@@ -5,6 +5,7 @@ import Login from '@/components/Login'
 import Main from '@/components/Main'
 import M0001 from '@/components/M0001/M0001'
 import M0002 from '@/components/M0002/M0002'
+import M0003 from '@/components/M0003/M0003'
 import S0001 from '@/components/S0001/S0001'
 
 Vue.use(Router)
@@ -26,6 +27,11 @@ const router = new Router({
           path: '/m0002',//群組權限管理
           name: 'M0002',
           component: M0002,
+          meta: { requiresAuth: true, adminAuth: true }
+        }, {
+          path: '/m0003',//功能管理
+          name: 'M0003',
+          component: M0003,
           meta: { requiresAuth: true, adminAuth: true }
         }, {
           path: '/s0001',
