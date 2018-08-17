@@ -9,6 +9,7 @@ import vueMultiselect from 'vue-multiselect'
 import VueGoodTablePlugin from 'vue-good-table';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
+import { faUsers } from '@fortawesome/free-solid-svg-icons'
 import { faKey } from '@fortawesome/free-solid-svg-icons'
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
@@ -19,12 +20,20 @@ import { faAngleLeft } from '@fortawesome/free-solid-svg-icons'
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
 import { faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faEdit } from '@fortawesome/free-solid-svg-icons'
+import { faSave } from '@fortawesome/free-solid-svg-icons'
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import { faUserPlus } from '@fortawesome/free-solid-svg-icons'
+import { faWarehouse } from '@fortawesome/free-solid-svg-icons'
+import { faUserCog } from '@fortawesome/free-solid-svg-icons'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'vue-multiselect/dist/vue-multiselect.min.css'
 import 'vue-good-table/dist/vue-good-table.css'
 
-library.add(faUser, faKey, faSignOutAlt, faSearch, faWrench, faUserAlt, faAngleDoubleLeft, faAngleLeft, faAngleRight, faAngleDoubleRight)
+library.add(faUserCog, faUsers, faWarehouse, faUserPlus, faTrashAlt, faSave,
+  faEdit, faUser, faKey, faSignOutAlt, faSearch, faWrench, faUserAlt,
+  faAngleDoubleLeft, faAngleLeft, faAngleRight, faAngleDoubleRight)
 
 Vue.use(bootstrap)
 Vue.use(VueAxios, axios)

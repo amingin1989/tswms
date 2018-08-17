@@ -4,7 +4,7 @@
 			<div class="container">
 				<div class="navbar-header">
 					<router-link to="/">
-						<a class="navbar-brand">衛星倉分貨系統</a>
+						<a class="navbar-brand">衛星 <font-awesome-icon icon="warehouse" /> 分貨系統</a>
 					</router-link>
 				</div>
 				<ul class="nav navbar-nav">

@@ -12,7 +12,7 @@
                             <ul v-if="errors.length" class="form-group">
                                 <li v-for="error in errors" :key="'GroupAddForm' + error">
                                     <small class="form-text text-danger">
-                                        {{error}}
+                                        {{ error }}
                                     </small>
                                 </li>
                             </ul>
@@ -49,8 +49,8 @@
                     </form>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" @click="saveForm">儲存</button>
                         <button type="button" class="btn btn-default" @click="cancel">取消</button>
+                        <button type="button" class="btn btn-primary" @click="save">儲存</button>
                     </div>
                 </div>
             </div>
@@ -73,16 +73,16 @@ export default {
   },
   methods: {
     cancel: function() {
-      this.clearForm();
+      this.clear();
       this.$emit("addFormClose"); //呼叫父方法
     },
-    saveForm: function() {
-      this.validForm();
+    save: function() {
+      this.valid();
       if (!this.errors.length) {
-        this.postForm();
+        this.post();
       }
     },
-    validForm: function() {
+    valid: function() {
       this.errors = [];
 
       if (!this.groupId) {
@@ -98,7 +98,7 @@ export default {
         this.errors.push("群組使用人員 需選擇");
       }
     },
-    postForm: function() {
+    post: function() {
       this.axios
         .post(
           "/addGroup",
@@ -112,7 +112,7 @@ export default {
         .then(function(response) {})
         .catch(function(error) {});
     },
-    clearForm: function() {
+    clear: function() {
       Object.assign(this.$data, this.$options.data());
     },
     validId: function(id) {

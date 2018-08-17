@@ -1,32 +1,8 @@
 <template>
   <div id="m0001">
-    <h1>人員管理</h1>
+    <h1><font-awesome-icon icon="user-cog" /> 人員管理</h1>
     <hr>
-    <!-- <div class="row">
-        <div class="col-md-3">
-            使用者代號/員編：
-        </div>
-        <div class="col-md-4">
-            群組代號：
-        </div>
-        <div class="col-md-5">
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <input type="text" v-model="usrId" class="form-control" placeholder="請輸入使用者代號/員編">
-        </div>
-        <div class="col-md-4">
-            <multiselect v-model="group" :options="groups" :multiple="false" :allow-empty="false" :close-on-select="true" :searchable="false" track-by="GROUP_ID" label="GROUP_NAME" placeholder="請選擇群組">
-            </multiselect>
-        </div>
-        <div class="col-md-5">
-          <button type="button" class="btn btn-info" style="margin-left: 20px;" @click="search()">查詢</button>
-        </div>
-    </div> -->
-
-
-    <usrEditable v-if="showUsr" :usrs="usrs" :groups="groups"></usrEditable>
+    <usrEditable v-if="showUsr" :usrs="usrs" :groups="groups" :whs="whs"></usrEditable>
     <loading v-if="showLoading"></loading>
     <msgDialog v-if="showMsgDialog" @msgDialogClose="msgDialogClose" :title="msgTitle" :msg="msgContent"></msgDialog>
   </div>
@@ -49,98 +25,118 @@ export default {
         { GROUP_ID: "899", GROUP_NAME: "總公司管理人員", GROUP_TYPE: "8" },
         { GROUP_ID: "799", GROUP_NAME: "倉庫管理人員", GROUP_TYPE: "7" }
         ],
+      whs: [
+        { WH_CODE: "001", WH_NM: "A倉(001)" },
+        { WH_CODE: "002", WH_NM: "B倉(002)" },
+        { WH_CODE: "003", WH_NM: "C倉(003)" }
+      ],
       showUsr: true,
       showLoading: false,
       showMsgDialog: false,
       msgTitle:'',
       msgContent: '',
       
-      /*usrs: {
-        cols : ["使用者代號", "使用者員編", "使用者姓名", "密碼", "歸屬倉庫", "群組代號", "登入狀態", "狀態"],
-        rows : [{"USER_ID":"M001", "USER_WORK_ID":"M001", "USER_NM":"AAA", "PASSWORD":"", "WH_CODE": "001", "WH_NM":"A倉", "GROUP_ID":"00001", "GROUP_NM":"00001 管理員", "LOGIN_STATUS":true, "STATUS":"true", "STATUS_SHOW":"正常"},
-      {"USER_ID":"M002", "USER_WORK_ID":"M002", "USER_NM":"BBB", "PASSWORD":"", "WH_CODE": "002", "WH_NM":"Ｂ倉", "GROUP_ID":"00001", "GROUP_NM":"00001 管理員", "LOGIN_STATUS":true, "STATUS":"false", "STATUS_SHOW":"停用"},
-      {"USER_ID":"003", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"00002", "GROUP_NM":"00002 使用者", "LOGIN_STATUS":true, "STATUS":"true", "STATUS_SHOW":"正常"},
-      {"USER_ID":"004", "USER_WORK_ID":"", "USER_NM":"DDD", "PASSWORD":"", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"00002", "GROUP_NM":"00002 使用者", "LOGIN_STATUS":true, "STATUS":"true", "STATUS_SHOW":"正常"},
-      {"USER_ID":"005", "USER_WORK_ID":"", "USER_NM":"EEE", "PASSWORD":"", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"00002", "GROUP_NM":"00002 使用者", "LOGIN_STATUS":false, "STATUS":"false", "STATUS_SHOW":"停用"},
-      {"USER_ID":"006", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"00002", "GROUP_NM":"00002 使用者", "LOGIN_STATUS":true, "STATUS":"true", "STATUS_SHOW":"正常"},
-      {"USER_ID":"007", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"00002", "GROUP_NM":"00002 使用者", "LOGIN_STATUS":false, "STATUS":"true", "STATUS_SHOW":"正常"},
-      {"USER_ID":"008", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"00002", "GROUP_NM":"00002 使用者", "LOGIN_STATUS":true, "STATUS":"true", "STATUS_SHOW":"正常"},
-      {"USER_ID":"009", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"00002", "GROUP_NM":"00002 使用者", "LOGIN_STATUS":false, "STATUS":"true", "STATUS_SHOW":"正常"},
-      {"USER_ID":"010", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"00002", "GROUP_NM":"00002 使用者", "LOGIN_STATUS":false, "STATUS":"true", "STATUS_SHOW":"正常"},
-      {"USER_ID":"011", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"00002", "GROUP_NM":"00002 使用者", "LOGIN_STATUS":true, "STATUS":"true", "STATUS_SHOW":"正常"},
-      {"USER_ID":"012", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"00002", "GROUP_NM":"00002 使用者", "LOGIN_STATUS":false, "STATUS":"true", "STATUS_SHOW":"正常"},
-      {"USER_ID":"013", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"00002", "GROUP_NM":"00002 使用者", "LOGIN_STATUS":false, "STATUS":"true", "STATUS_SHOW":"正常"},
-      {"USER_ID":"014", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"00002", "GROUP_NM":"00002 使用者", "LOGIN_STATUS":false, "STATUS":"true", "STATUS_SHOW":"正常"},
-      {"USER_ID":"015", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"00002", "GROUP_NM":"00002 使用者", "LOGIN_STATUS":true, "STATUS":"true", "STATUS_SHOW":"正常"},
-      {"USER_ID":"016", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"00002", "GROUP_NM":"00002 使用者", "LOGIN_STATUS":false, "STATUS":"true", "STATUS_SHOW":"正常"},
-      {"USER_ID":"017", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"00002", "GROUP_NM":"00002 使用者", "LOGIN_STATUS":true, "STATUS":"true", "STATUS_SHOW":"正常"},
-      {"USER_ID":"018", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"00002", "GROUP_NM":"00002 使用者", "LOGIN_STATUS":true, "STATUS":"true", "STATUS_SHOW":"正常"}]}*/
-
       usrs: {
         cols : [{
           label: '使用者代號',
           field: 'USER_ID',
           filterable: true,
-          tdClass: 'text-center'
+          thClass: 'vgt-center-align',
+          tdClass: 'vgt-center-align',
+          width: '100px',
         },{
           label: '使用者員編',
           field: 'USER_WORK_ID',
           filterable: true,
-          tdClass: 'text-center'
+          thClass: 'vgt-center-align',
+          tdClass: 'vgt-center-align',
+          width: '100px'
         },{
           label: '使用者姓名',
           field: 'USER_NM',
           filterable: true,
-          tdClass: 'text-center'
+          thClass: 'vgt-center-align',
+          tdClass: 'vgt-center-align',
+          width: '150px'
         },{
           label: '密碼',
           field: 'PASSWORD',
           filterable: true,
           sortable: false,
-          globalSearchDisabled: true
+          globalSearchDisabled: true,
+          formatFn: this.pwdFormat,
+          thClass: 'vgt-center-align',
+          tdClass: 'vgt-center-align',
+          width: '100px'
         },{
           label: '歸屬倉庫',
           field: 'WH_CODE',
           filterable: true,
-          tdClass: 'text-center'
+          thClass: 'vgt-center-align',
+          tdClass: 'vgt-center-align',
+          formatFn: this.whCodeFormat
         },{
           label: '群組代號',
           field: 'GROUP_ID',
           filterable: true,
-          tdClass: 'text-center'
+          thClass: 'vgt-center-align',
+          tdClass: 'vgt-center-align',
+          formatFn: this.groupIdFormat
         } ,{
           label: '登入狀態',
           field: 'LOGIN_STATUS',
           filterable: true,
           sortable: false,
-          tdClass: 'text-center'
+          thClass: 'vgt-center-align',
+          tdClass: 'vgt-center-align',
+          formatFn: this.loginStatusFormat,
+          width: '80px'
         } ,{
           label: '狀態',
           field: 'STATUS',
           filterable: true,
           sortable: false,
           globalSearchDisabled: true,
-          tdClass: 'text-center'
-        } 
+          thClass: 'vgt-center-align',
+          tdClass: 'vgt-center-align',
+          formatFn: this.statusFormat,
+          width: '100px'
+        } ,{
+          label: '',
+          field: 'SAVE',
+          filterable: false,
+          sortable: false,
+          globalSearchDisabled: false,
+          thClass: 'vgt-center-align',
+          tdClass: 'vgt-center-align'
+        } ,{
+          label: '',
+          field: 'DELETE',
+          filterable: false,
+          sortable: false,
+          globalSearchDisabled: false,
+          thClass: 'vgt-center-align',
+          tdClass: 'vgt-center-align'
+        }
         ],
-        rows : [{"USER_ID":"M001", "USER_WORK_ID":"M001", "USER_NM":"AAA", "PASSWORD":"*****", "WH_CODE": "001", "WH_NM":"A倉", "GROUP_ID":"999", "GROUP_NM":"999 資訊管理人員", "LOGIN_STATUS":true, "STATUS":"true", "STATUS_SHOW":"正常"},
-      {"USER_ID":"M002", "USER_WORK_ID":"M002", "USER_NM":"BBB", "PASSWORD":"*****", "WH_CODE": "002", "WH_NM":"Ｂ倉", "GROUP_ID":"999", "GROUP_NM":"999 資訊管理人員", "LOGIN_STATUS":true, "STATUS":"false", "STATUS_SHOW":"停用"},
-      {"USER_ID":"003", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"*****", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"899", "GROUP_NM":"899 總公司管理人員", "LOGIN_STATUS":true, "STATUS":"true", "STATUS_SHOW":"正常"},
-      {"USER_ID":"004", "USER_WORK_ID":"", "USER_NM":"DDD", "PASSWORD":"*****", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"799", "GROUP_NM":"799 倉庫管理人員", "LOGIN_STATUS":true, "STATUS":"true", "STATUS_SHOW":"正常"},
-      {"USER_ID":"005", "USER_WORK_ID":"", "USER_NM":"EEE", "PASSWORD":"*****", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"799", "GROUP_NM":"799 倉庫管理人員", "LOGIN_STATUS":false, "STATUS":"false", "STATUS_SHOW":"停用"},
-      {"USER_ID":"006", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"*****", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"799", "GROUP_NM":"799 倉庫管理人員", "LOGIN_STATUS":true, "STATUS":"true", "STATUS_SHOW":"正常"},
-      {"USER_ID":"007", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"*****", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"199", "GROUP_NM":"199 XXX", "LOGIN_STATUS":false, "STATUS":"true", "STATUS_SHOW":"正常"},
-      {"USER_ID":"008", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"*****", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"199", "GROUP_NM":"199 XXX", "LOGIN_STATUS":true, "STATUS":"true", "STATUS_SHOW":"正常"},
-      {"USER_ID":"009", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"*****", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"299", "GROUP_NM":"299 AAA", "LOGIN_STATUS":false, "STATUS":"true", "STATUS_SHOW":"正常"},
-      {"USER_ID":"010", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"*****", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"299", "GROUP_NM":"299 AAA", "LOGIN_STATUS":false, "STATUS":"true", "STATUS_SHOW":"正常"},
-      {"USER_ID":"011", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"*****", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"199", "GROUP_NM":"199 XXX", "LOGIN_STATUS":true, "STATUS":"true", "STATUS_SHOW":"正常"},
-      {"USER_ID":"012", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"*****", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"199", "GROUP_NM":"199 XXX", "LOGIN_STATUS":false, "STATUS":"true", "STATUS_SHOW":"正常"},
-      {"USER_ID":"013", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"*****", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"199", "GROUP_NM":"199 XXX", "LOGIN_STATUS":false, "STATUS":"true", "STATUS_SHOW":"正常"},
-      {"USER_ID":"014", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"*****", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"199", "GROUP_NM":"199 XXX", "LOGIN_STATUS":false, "STATUS":"true", "STATUS_SHOW":"正常"},
-      {"USER_ID":"015", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"*****", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"199", "GROUP_NM":"199 XXX", "LOGIN_STATUS":true, "STATUS":"true", "STATUS_SHOW":"正常"},
-      {"USER_ID":"016", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"*****", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"199", "GROUP_NM":"199 XXX", "LOGIN_STATUS":false, "STATUS":"true", "STATUS_SHOW":"正常"},
-      {"USER_ID":"017", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"*****", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"199", "GROUP_NM":"199 XXX", "LOGIN_STATUS":true, "STATUS":"true", "STATUS_SHOW":"正常"},
-      {"USER_ID":"018", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"*****", "WH_CODE": "003", "WH_NM":"C倉", "GROUP_ID":"199", "GROUP_NM":"199 XXX", "LOGIN_STATUS":true, "STATUS":"true", "STATUS_SHOW":"正常"}]
+        rows : [{"USER_ID":"M001", "USER_WORK_ID":"M001", "USER_NM":"AAA", "PASSWORD":"", "WH_CODE": "001", "GROUP_ID":"999", "LOGIN_STATUS":true, "STATUS":true, "editMode":false},
+      {"USER_ID":"M002", "USER_WORK_ID":"M002", "USER_NM":"BBB", "PASSWORD":"", "WH_CODE": "002", "GROUP_ID":"999", "LOGIN_STATUS":true, "STATUS":false, "editMode":false},
+      {"USER_ID":"003", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"", "WH_CODE": "003", "GROUP_ID":"899", "LOGIN_STATUS":true, "STATUS":true, "editMode":false},
+      {"USER_ID":"004", "USER_WORK_ID":"", "USER_NM":"DDD", "PASSWORD":"", "WH_CODE": "003", "GROUP_ID":"799", "LOGIN_STATUS":true, "STATUS":true, "editMode":false},
+      {"USER_ID":"005", "USER_WORK_ID":"", "USER_NM":"EEE", "PASSWORD":"", "WH_CODE": "003", "GROUP_ID":"799", "LOGIN_STATUS":false, "STATUS":false, "editMode":false},
+      {"USER_ID":"006", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"", "WH_CODE": "003", "GROUP_ID":"799", "LOGIN_STATUS":true, "STATUS":true, "editMode":false},
+      {"USER_ID":"007", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"", "WH_CODE": "003", "GROUP_ID":"199", "LOGIN_STATUS":false, "STATUS":true, "editMode":false},
+      {"USER_ID":"008", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"", "WH_CODE": "003", "GROUP_ID":"199", "LOGIN_STATUS":true, "STATUS":true, "editMode":false},
+      {"USER_ID":"009", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"", "WH_CODE": "003", "GROUP_ID":"299", "LOGIN_STATUS":false, "STATUS":true, "editMode":false},
+      {"USER_ID":"010", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"", "WH_CODE": "003", "GROUP_ID":"299", "LOGIN_STATUS":false, "STATUS":true, "editMode":false},
+      {"USER_ID":"011", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"", "WH_CODE": "003", "GROUP_ID":"199", "LOGIN_STATUS":true, "STATUS":true, "editMode":false},
+      {"USER_ID":"012", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"", "WH_CODE": "003", "GROUP_ID":"199", "LOGIN_STATUS":false, "STATUS":true, "editMode":false},
+      {"USER_ID":"013", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"", "WH_CODE": "003", "GROUP_ID":"199", "LOGIN_STATUS":false, "STATUS":true, "editMode":false},
+      {"USER_ID":"014", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"", "WH_CODE": "003", "GROUP_ID":"199", "LOGIN_STATUS":false, "STATUS":true, "editMode":false},
+      {"USER_ID":"015", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"", "WH_CODE": "003", "GROUP_ID":"199", "LOGIN_STATUS":true, "STATUS":true, "editMode":false},
+      {"USER_ID":"016", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"", "WH_CODE": "003", "GROUP_ID":"199", "LOGIN_STATUS":false, "STATUS":true, "editMode":false},
+      {"USER_ID":"017", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"", "WH_CODE": "003", "GROUP_ID":"199", "LOGIN_STATUS":true, "STATUS":true, "editMode":false},
+      {"USER_ID":"018", "USER_WORK_ID":"", "USER_NM":"CCC", "PASSWORD":"", "WH_CODE": "003", "GROUP_ID":"199", "LOGIN_STATUS":true, "STATUS":true, "editMode":false}]
       }
     };
 	},
@@ -189,6 +185,27 @@ export default {
     },
     rmUsr: function(){
 
+    },
+    loginStatusFormat: function(value){
+      return value ? '登入' : '未登入';
+    },
+    statusFormat: function(value){
+      return value ? '啟用' : '停用';
+    },
+    pwdFormat: function(value){
+      return '*****';
+    },
+    whCodeFormat: function(value){
+      const whArray = this.whs.filter(function(wh) {
+        return wh.WH_CODE == value;
+      });
+      return (whArray.length) ? whArray[0].WH_NM : '';
+    },
+    groupIdFormat: function(groupId){
+      const groupArray = this.groups.filter(function(group) {
+        return group.GROUP_ID == groupId;
+      });
+      return (groupArray.length) ? groupArray[0].GROUP_ID + ' ' + groupArray[0].GROUP_NAME : '';
     }
   },
   mounted: function(){

@@ -1,59 +1,47 @@
 <template>
-    <div id="m0002">
-        <h1>群組權限管理</h1>
-        <hr>
-        <!-- <form class="form-inline">
-            <<div class="form-group">
-                <label for="groupId">群組代號：</label>
-                <input type="text" id="M00002GroupId" v-model="groupId" value="" class="form-control" placeholder="請輸入群組代號">
-            </div> -->
-        <!-- 
-            <div class="form-group">
-                <label for="groupNm">
-                    <h4>群組對象：</h4>
-                </label>
-                <multiselect v-model="groupFor" :options="groups" :multiple="false" :allow-empty="false" :close-on-select="true" track-by="GROUP_ID" label="GROUP_NAME" placeholder="請選擇群組">
-                </multiselect>
-            </div>
-            <button type="button" class="btn btn-primary" style="margin-left: 20px;" @click="addGroup">新增</button>
-        </form> -->
-
-        <div class="row rowSpan">
-            <label class="col-md-4 control-label">
-                <h4>群組對象：</h4>
-            </label>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <multiselect v-model="groupFor" :options="groups" :multiple="false" :allow-empty="false" :close-on-select="true" track-by="GROUP_ID" label="GROUP_NAME" placeholder="請選擇群組">
-                </multiselect>
-            </div>
-            <div class="col-md-2">
-                <button type="button" class="btn btn-primary" @click="showAddGroup">新增</button>
-            </div>
-        </div>
-
-        <div class="row rowSpan">
-            <label class="col-md-4 control-label">
-                <h4>{{ showGroupName }} 群組功能 :</h4>
-            </label>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <multiselect v-model="selectedFunc" :options="functions" :multiple="true" :allow-empty="true" :close-on-select="false" group-values="funcData" group-label="catgName" :group-select="true" :hide-selected="true" track-by="FUNCTION_ID" :custom-label="optionLabel" placeholder="請選擇 / 輸入欲查詢功能">
-                </multiselect>
-            </div>
-        </div>
-        <div class="row rowSpan">
-            <div class="col-md-4"></div>
-            <div class="col-md-4" style="text-align:center;">
-                <button type="button" class="btn btn-success" style="margin-left: 20px;" @click="save()">儲存</button>
-            </div>
-            <div class="col-md-4"></div>
-        </div>
-        <loading v-if="showLoading"></loading>
-        <groupAddForm v-if="showGroupAddForm" :groups="groups" @addFormClose="addFormClose"></groupAddForm>
+  <div id="m0002">
+    <h1>
+      <font-awesome-icon icon="users" /> 群組權限管理</h1>
+    <hr>
+    <div class="row rowSpan">
+      <label class="col-md-4 control-label">
+        <h4>群組對象：</h4>
+      </label>
     </div>
+    <div class="row">
+      <div class="col-md-4">
+        <multiselect v-model="groupFor" :options="groups" :multiple="false" :allow-empty="false" :close-on-select="true" track-by="GROUP_ID" label="GROUP_NAME" placeholder="請選擇群組">
+        </multiselect>
+      </div>
+      <div class="col-md-2">
+        <button type="button" class="btn btn-primary" @click="showAddGroup">新增</button>
+      </div>
+    </div>
+
+    <div class="row rowSpan">
+      <label class="col-md-4 control-label">
+        <h4>{{ showGroupName }} 群組功能 :</h4>
+      </label>
+    </div>
+    <div class="row">
+      <div class="col-md-10">
+        <multiselect v-model="selectedFunc" :options="functions" :multiple="true" :allow-empty="true" :close-on-select="false" group-values="funcData" group-label="funcCatgName" :group-select="true" :hide-selected="true" track-by="FUNCTION_ID" label="FUNCTION_NAME" placeholder="請選擇 / 輸入欲查詢功能">
+        </multiselect>
+      </div>
+      <div class="col-md-2">
+        <button type="button" class="btn btn-warning" :disabled="!functions.length" @click="selectAllNot">{{ selectAllText }}</button>
+      </div>
+    </div>
+    <div class="row rowSpan">
+      <div class="col-md-4"></div>
+      <div class="col-md-4" style="text-align:center;">
+        <button type="button" class="btn btn-success" style="margin-left: 20px;" @click="save">儲存</button>
+      </div>
+      <div class="col-md-4"></div>
+    </div>
+    <loading v-if="showLoading"></loading>
+    <groupAddForm v-if="showGroupAddForm" :groups="groups" @addFormClose="addFormClose"></groupAddForm>
+  </div>
 </template>
 
 <script>
@@ -75,15 +63,12 @@ export default {
       ],
       showGroupName: "",
       functions: [],
-      selectedFunc: []
+      funcLength: 0,
+      selectedFunc: [],
+      selectAllText: "全選"
     };
   },
   methods: {
-    optionLabel: function(func) {
-      if (func) {
-        return `${func.FUNCTION_NAME}`;
-      }
-    },
     save: function() {
       alert("save");
     },
@@ -92,19 +77,40 @@ export default {
     },
     addFormClose: function() {
       this.showGroupAddForm = false;
+    },
+    selectAllNot: function() {
+      if (this.selectAllText == "全選") {
+        const _this = this;
+        _this.selectedFunc = [];
+        _this.functions.forEach(function(funcCatg, key) {
+          funcCatg.funcData.forEach(function(func, funcKey) {
+            _this.selectedFunc.push(func);
+          });
+        });
+      } else {
+        this.selectedFunc = [];
+      }
     }
   },
   watch: {
+    selectedFunc: function(selectedFunc){
+      if(selectedFunc.length == this.funcLength){
+        this.selectAllText = "取消全選";
+      }else{
+        this.selectAllText = "全選";
+      }
+    },
     groupFor: function(group) {
-      this.showGroupName = group.GROUP_NAME;
+      const _this = this;
+      _this.showGroupName = group.GROUP_NAME;
 
       //顯示該群組目前已選擇的功能
-      this.selectedFunc = [];
+      _this.selectedFunc = [];
 
       //顯示該群組能使用的所有功能
-      this.functions = [
+      _this.functions = [
         {
-          catgName: "管理類",
+          funcCatgName: "管理類",
           funcData: [
             {
               FUNCTION_ID: "M0001",
@@ -137,7 +143,7 @@ export default {
           ]
         },
         {
-          catgName: "查詢類",
+          funcCatgName: "查詢類",
           funcData: [
             {
               FUNCTION_ID: "S0001",
@@ -162,6 +168,12 @@ export default {
           ]
         }
       ];
+
+      _this.functions.forEach(function(funcCatg, key) {
+        funcCatg.funcData.forEach(function(func, funcKey) {
+          _this.funcLength++;
+        });
+      });
     }
   },
   mounted: function() {

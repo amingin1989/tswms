@@ -47,7 +47,7 @@
               <div class="form-group">
                 <label class="control-label col-md-3">歸屬倉庫</label>
                 <div class="col-md-9">
-                  <multiselect v-model="wh" :options="whs" :multiple="false" :allow-empty="false" :close-on-select="true" :searchable="false" track-by="wh_code" label="wh_name" placeholder="請選擇歸屬倉庫">
+                  <multiselect v-model="wh" :options="whs" :multiple="false" :allow-empty="false" :close-on-select="true" :searchable="false" track-by="WH_CODE" label="WH_NM" placeholder="請選擇歸屬倉庫">
                   </multiselect>
                 </div>
               </div>
@@ -71,8 +71,8 @@
           </form>
 
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary" @click="saveForm">儲存</button>
             <button type="button" class="btn btn-default" @click="cancel">取消</button>
+            <button type="button" class="btn btn-primary" @click="saveForm">儲存</button>
           </div>
         </div>
       </div>
@@ -138,7 +138,9 @@ export default {
             }
           }
         )
-        .then(function(response) {})
+        .then(function(response) {
+          this.cancel();
+        })
         .catch(function(error) {});
     },
     clearForm: function() {
